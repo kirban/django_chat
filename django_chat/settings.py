@@ -25,20 +25,20 @@ SECRET_KEY = 'frla26ivp6%exnlvsm65pep@(xv#%6)9%_x$=jj8*y=g=56t6k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["192.168.1.35"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'channels',
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Live_Chat.apps.LiveChatConfig',
 ]
 
 MIDDLEWARE = [
@@ -72,9 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_chat.wsgi.application'
 
-# Channels
-ASGI_APPLICATION = 'django_chat.routing.application'
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -82,6 +79,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'TEST': {
+            'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3')
+        }
     }
 }
 
@@ -123,3 +123,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Channels
+ASGI_APPLICATION = 'django_chat.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
